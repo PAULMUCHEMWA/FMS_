@@ -1,0 +1,79 @@
+{
+ "rules": {
+  ".read": false,
+  ".write": false,
+  "admins": {
+   "$uid": {
+    ".read": "auth!=null&&auth.uid===$uid"
+   }
+  },
+  "config": {
+   "levels": {
+    ".read": "auth!=null",
+    ".write": "auth!=null&&root.child('admins/'+auth.uid).val()===true"
+   }
+  },
+  "users": {
+   ".read": "auth!=null&&root.child('admins/'+auth.uid).val()===true",
+   "$uid": {
+    ".read": "auth!=null&&(auth.uid===$uid||(data.exists()&&(root.child('users/'+auth.uid).child('cid').val()===data.child('cid').val()&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+data.child('cid').val()+'/profile/status').val()==='active'&&(root.child('users/'+auth.uid).child('level').val()==='owner'||(root.child('users/'+auth.uid).child('perm/stf').exists()&&root.child('users/'+auth.uid).child('perm/stf').val()>=2)))))",
+    ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(data.exists()&&(root.child('users/'+auth.uid).child('cid').val()===data.child('cid').val()&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+data.child('cid').val()+'/profile/status').val()==='active'&&(root.child('users/'+auth.uid).child('level').val()==='owner'||(root.child('users/'+auth.uid).child('perm/stf').exists()&&root.child('users/'+auth.uid).child('perm/stf').val()>=2))))||(!data.exists()&&(root.child('users/'+auth.uid).child('cid').val()===newData.child('cid').val()&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+newData.child('cid').val()+'/profile/status').val()==='active'&&(root.child('users/'+auth.uid).child('level').val()==='owner'||(root.child('users/'+auth.uid).child('perm/stf').exists()&&root.child('users/'+auth.uid).child('perm/stf').val()>=2))))||(!data.exists()&&auth.uid===$uid&&newData.child('level').val()==='owner'&&root.child('companies/'+newData.child('cid').val()+'/profile/owner').val()===auth.uid&&root.child('companies/'+newData.child('cid').val()+'/profile/status').val()==='pending'))",
+    "last": {
+     ".write": "auth!=null&&auth.uid===$uid"
+    }
+   }
+  },
+  "companies": {
+   ".read": "auth!=null&&root.child('admins/'+auth.uid).val()===true",
+   "$cid": {
+    ".read": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'))",
+    ".write": "auth!=null&&root.child('admins/'+auth.uid).val()===true",
+    "profile": {
+     ".read": "auth!=null&&root.child('users/'+auth.uid).child('cid').val()===$cid",
+     ".write": "auth!=null&&(!data.exists()&&newData.child('owner').val()===auth.uid&&newData.child('status').val()==='pending')"
+    },
+    "staff": {
+     "$s": {
+      ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&(root.child('users/'+auth.uid).child('level').val()==='owner'||(root.child('users/'+auth.uid).child('perm/stf').exists()&&root.child('users/'+auth.uid).child('perm/stf').val()>=2))))"
+     }
+    },
+    "vehicles": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2)||(root.child('users/'+auth.uid).child('perm/ast').exists()&&root.child('users/'+auth.uid).child('perm/ast').val()>=2)||(root.child('users/'+auth.uid).child('perm/trp').exists()&&root.child('users/'+auth.uid).child('perm/trp').val()>=2))))"
+    },
+    "trailers": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2)||(root.child('users/'+auth.uid).child('perm/ast').exists()&&root.child('users/'+auth.uid).child('perm/ast').val()>=2))))"
+    },
+    "trips": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2)||(root.child('users/'+auth.uid).child('perm/trp').exists()&&root.child('users/'+auth.uid).child('perm/trp').val()>=2))))"
+    },
+    "imports": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2))))"
+    },
+    "drivers": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/drv').exists()&&root.child('users/'+auth.uid).child('perm/drv').val()>=2)||(root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2))))"
+    },
+    "driverDocs": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/drv').exists()&&root.child('users/'+auth.uid).child('perm/drv').val()>=2)||(root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2))))"
+    },
+    "profiles": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'))"
+    },
+    "ledger": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/led').exists()&&root.child('users/'+auth.uid).child('perm/led').val()>=2))))"
+    },
+    "rates": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/rat').exists()&&root.child('users/'+auth.uid).child('perm/rat').val()>=2))))"
+    },
+    "settings": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/int').exists()&&root.child('users/'+auth.uid).child('perm/int').val()>=2))))"
+    },
+    "docs": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/ast').exists()&&root.child('users/'+auth.uid).child('perm/ast').val()>=2)||(root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2)||(root.child('users/'+auth.uid).child('perm/drv').exists()&&root.child('users/'+auth.uid).child('perm/drv').val()>=2))))"
+    },
+    "docFiles": {
+     ".write": "auth!=null&&(root.child('admins/'+auth.uid).val()===true||(root.child('users/'+auth.uid).child('cid').val()===$cid&&root.child('users/'+auth.uid).child('active').val()===true&&root.child('companies/'+$cid+'/profile/status').val()==='active'&&((root.child('users/'+auth.uid).child('perm/ast').exists()&&root.child('users/'+auth.uid).child('perm/ast').val()>=2)||(root.child('users/'+auth.uid).child('perm/flt').exists()&&root.child('users/'+auth.uid).child('perm/flt').val()>=2)||(root.child('users/'+auth.uid).child('perm/drv').exists()&&root.child('users/'+auth.uid).child('perm/drv').val()>=2))))"
+    }
+   }
+  }
+ }
+}
